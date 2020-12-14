@@ -29,6 +29,11 @@ public class TaskResource {
 
 	@Autowired
 	private TaskService taskService;
+	
+	@GetMapping("/")
+    public String index() {
+        return "Welcome to Number Generator";
+    }
 
 	@PostMapping("generate")
 	public ResponseEntity<String> generate(@RequestBody TaskDTO taskDTO)

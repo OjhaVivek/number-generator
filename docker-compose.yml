@@ -1,0 +1,44 @@
+version: '3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SYNC_LIMIT: 2
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka
+    ports:
+      - 9094:9094
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://kafka:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,OUTSIDE://localhost:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+  cassandra:
+      image: cassandra:latest
+      container_name: cassandra
+      ports:
+        - "9042:9042"
+      environment:
+        - "MAX_HEAP_SIZE=256M"
+        - "HEAP_NEWSIZE=128M"
+      restart: always
+      volumes:
+        - ./src/main/resources/entrypoint-wrap.sh:/cassandra-init.sh
+      command: "sh /cassandra-init.sh"
+  spring_boot:
+    build: .
+    ports: 
+      - 8080:8080
+    depends_on:
+      - kafka
+      - zookeeper
+      - cassandra
+    restart: always

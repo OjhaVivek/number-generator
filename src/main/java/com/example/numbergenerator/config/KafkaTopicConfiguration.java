@@ -9,8 +9,7 @@ public class KafkaTopicConfiguration {
 
 	@Bean
 	public NewTopic task() {
-		return new NewTopic("task", 3, (short) 2);
+		return new NewTopic("task", 3, (short) 1);
 	}
 
 }
-

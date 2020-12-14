@@ -54,12 +54,12 @@ public class TaskService {
 	}
 
 	public List<String> getTaskStatusForUUID(String uuid) {
-		List<Task> tasks = taskRepository.findByKeyId(uuid);
+		List<Task> tasks = taskRepository.findTaskByTaskId_Id(uuid);
 		return tasks.stream().map(task -> task.getStatus().getValue()).collect(Collectors.toList());
 	}
 
 	public List<String> getNumListForUUID(String uuid) {
-		List<Task> tasks = taskRepository.findByKeyId(uuid);
+		List<Task> tasks = taskRepository.findTaskByTaskId_Id(uuid);
 		return tasks.stream().map(Task::getNumberList).collect(Collectors.toList());
 	}
 
