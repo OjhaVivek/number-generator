@@ -1,4 +1,5 @@
-# number-generator
+Description: Project generated numbers in decreasing order starting from the goal and decreasing by step size each time until it is greated than or equal to 0. Input is provided to the project via APIs. APIs are used to query task completion status and numbers list generated.
+Technologies: Spring Boot, Kafka, Cassandra and Docker
 
 Testing in local
 
