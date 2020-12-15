@@ -1,4 +1,4 @@
-package com.example.numbergenerator.service;
+package com.example.numbergenerator.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,8 +18,8 @@ import com.example.numbergenerator.dtos.TaskDTO;
 import com.example.numbergenerator.entity.Task;
 import com.example.numbergenerator.entity.TaskId;
 import com.example.numbergenerator.repository.TaskRepository;
+import com.example.numbergenerator.service.TaskService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -29,13 +29,13 @@ public class TaskServiceImpl implements TaskService {
 
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
-	
+
 	@Autowired
 	private TaskRepository taskRepository;
 
 	@Override
-	public String createTask(List<TaskDTO> taskDTOs) throws JsonMappingException, JsonProcessingException,
-			InterruptedException, ExecutionException, TimeoutException {
+	public String createTask(List<TaskDTO> taskDTOs)
+			throws InterruptedException, ExecutionException, TimeoutException, JsonProcessingException {
 		UUID uuid = UUID.randomUUID();
 		List<Task> tasks = new ArrayList<>();
 		Date curDate = new Date();

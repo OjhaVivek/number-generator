@@ -1,5 +1,6 @@
 package com.example.numbergenerator.core;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -48,6 +49,7 @@ public class NumberGenerator {
 				numberListBuilder.setLength(numberListBuilder.length()-1);
 				task.setNumberList(numberListBuilder.toString());
 				task.setStatus(TaskStatus.SUCCESS);
+				task.setLastChangeTs(new Date());
 			} catch (Exception e) {
 				task.setStatus(TaskStatus.ERROR);
 			}
