@@ -6,17 +6,37 @@ import java.util.concurrent.TimeoutException;
 
 import com.example.numbergenerator.dtos.TaskDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
+/*
+ *  
+ * Service signature used by resource layer to interact with other service like kafka and cassandra.
+ */
 public interface TaskService {
 
-	String createTask(List<TaskDTO> taskDTOs) throws JsonMappingException, JsonProcessingException,
-			InterruptedException, ExecutionException, TimeoutException;
+	/**
+	 * Handles the logic on creating the tasks.
+	 * @param taskDTOs - Validated messages received By APIs
+	 * @return id with which document is created
+	 * @throws JsonProcessingException
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 * @throws TimeoutException
+	 */
+	String createTask(List<TaskDTO> taskDTOs)
+			throws JsonProcessingException, InterruptedException, ExecutionException, TimeoutException;
 
+	/**
+	 * Fetches status of all the tasks associated with the provided id.
+	 * @param uuid - id of the tasks
+	 * @return list of statuses.
+	 */
 	List<String> getTaskStatusForUUID(String uuid);
 
+	/**
+	 * Fetches number list generated for all the tasks associated with the provided id.
+	 * @param uuid - id of the tasks
+	 * @return list of number lists
+	 */
 	List<String> getNumListForUUID(String uuid);
-
-	
 
 }

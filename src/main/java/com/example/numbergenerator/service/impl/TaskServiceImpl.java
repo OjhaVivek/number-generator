@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class TaskServiceImpl implements TaskService {
+	
+	private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
 
 	private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -36,6 +40,7 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public String createTask(List<TaskDTO> taskDTOs)
 			throws InterruptedException, ExecutionException, TimeoutException, JsonProcessingException {
+		logger.info("create task called for {}", taskDTOs);
 		UUID uuid = UUID.randomUUID();
 		List<Task> tasks = new ArrayList<>();
 		Date curDate = new Date();
@@ -50,18 +55,21 @@ public class TaskServiceImpl implements TaskService {
 		}
 		kafkaTemplate.send(Constants.TOPIC_NAME, objectMapper.writeValueAsString(tasks))
 				.get(Constants.KAFKA_SEND_WAIT_TIME, TimeUnit.SECONDS);
+		logger.info("create task completed for {} with uuid: {}", taskDTOs, uuid);
 		return uuid.toString();
 
 	}
 
 	@Override
 	public List<String> getTaskStatusForUUID(String uuid) {
+		logger.info("get task status called for uuid: {}", uuid);
 		List<Task> tasks = taskRepository.findAllByTaskIdId(uuid);
 		return tasks.stream().map(task -> task.getStatus().getValue()).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<String> getNumListForUUID(String uuid) {
+		logger.info("get num list called for uuid: {}", uuid);
 		List<Task> tasks = taskRepository.findAllByTaskIdId(uuid);
 		return tasks.stream().map(Task::getNumberList).collect(Collectors.toList());
 	}
