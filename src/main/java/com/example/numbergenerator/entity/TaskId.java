@@ -1,7 +1,6 @@
 package com.example.numbergenerator.entity;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
 import org.springframework.data.cassandra.core.mapping.PrimaryKeyClass;
@@ -12,7 +11,7 @@ public class TaskId implements Serializable {
 	
 	private static final long serialVersionUID = -8511461744381191854L;
 	@PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED, ordinal = 1, value = "id")
-	public UUID id;
+	public String id;
 	@PrimaryKeyColumn(type = PrimaryKeyType.CLUSTERED, ordinal = 2, value = "sequence_number")
 	public Integer sequenceNumber;
 
@@ -20,7 +19,7 @@ public class TaskId implements Serializable {
 		super();
 	}
 
-	public TaskId(UUID id, Integer sequenceNumber) {
+	public TaskId(String id, Integer sequenceNumber) {
 		super();
 		this.id = id;
 		this.sequenceNumber = sequenceNumber;
@@ -30,12 +29,12 @@ public class TaskId implements Serializable {
 	public String toString() {
 		return "TaskId [id=" + id + ", sequenceNumber=" + sequenceNumber + "]";
 	}
-	
-	public UUID getId() {
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

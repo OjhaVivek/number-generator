@@ -2,6 +2,7 @@ package com.example.numbergenerator.core;
 
 import java.util.List;
 
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -27,9 +28,9 @@ public class NumberGenerator {
 	private TaskRepository taskRepository;
 
 	@KafkaListener(topics = Constants.TOPIC_NAME)
-	public void processTasks(String message, Acknowledgment acknowledgment,
+	public void processTasks(ConsumerRecord<String, String> message, Acknowledgment acknowledgment,
 			@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition) throws JsonMappingException, JsonProcessingException {
-		List<Task> tasks = objectMapper.readValue(message, new TypeReference<List<Task>>() {});
+		List<Task> tasks = objectMapper.readValue(message.value(), new TypeReference<List<Task>>() {});
 
 		tasks.stream().parallel().forEach(task -> {
 			try {
@@ -40,7 +41,7 @@ public class NumberGenerator {
 				
 				StringBuilder numberListBuilder = new StringBuilder();
 				int i=task.getGoal();
-				while (i > 0) {
+				while (i >= 0) {
 					numberListBuilder.append(i + ",");
 					i -= task.getStep();
 				}

@@ -60,7 +60,7 @@ public class TaskResource {
 	}
 
 	@GetMapping("tasks/{uuid}/status")
-	public ResponseEntity<List<String>> getStatus(String uuid)
+	public ResponseEntity<List<String>> getStatus(@PathVariable("uuid") String uuid)
 			throws InternalServerException, ResourceNotFoundException, InvalidRequestException {
 		try {
 			if (StringUtils.isBlank(uuid)) {

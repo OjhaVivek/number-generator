@@ -11,7 +11,6 @@ import com.example.numbergenerator.entity.TaskId;
 @Repository
 public interface TaskRepository extends CrudRepository<Task, TaskId> {
 
-	// Naming convention is as per spring data repository documentation.
-	List<Task> findTaskByTaskId_Id(final String id);
+	List<Task> findAllByTaskIdId(final String id);
 
 }
