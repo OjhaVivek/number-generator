@@ -1,9 +1,9 @@
 package com.example.numbergenerator.resource.advice;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.numbergenerator.exception.InternalServerException;
 import com.example.numbergenerator.exception.InvalidRequestException;
@@ -12,16 +12,19 @@ import com.example.numbergenerator.exception.ResourceNotFoundException;
 @ControllerAdvice
 public class TaskResourceExceptionHandler {
 
-	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(InvalidRequestException.class)
-	public void handle(InvalidRequestException e) {}
+	public ResponseEntity<String> handle(InvalidRequestException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 	
-	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public void handle(ResourceNotFoundException e) {}
+	public ResponseEntity<String> handle(ResourceNotFoundException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	}
 	
-	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(InternalServerException.class)
-	public void handle(InternalServerException e) {}
+	public ResponseEntity<String> handle(InternalServerException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	
 }

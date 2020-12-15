@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.numbergenerator.common.Constants;
 import com.example.numbergenerator.dtos.TaskDTO;
 import com.example.numbergenerator.exception.InternalServerException;
 import com.example.numbergenerator.exception.InvalidRequestException;
@@ -61,17 +62,14 @@ public class TaskResource {
 
 	@GetMapping("tasks/{uuid}/status")
 	public ResponseEntity<List<String>> getStatus(@PathVariable("uuid") String uuid)
-			throws InternalServerException, ResourceNotFoundException, InvalidRequestException {
+			throws InternalServerException, ResourceNotFoundException {
 		try {
-			if (StringUtils.isBlank(uuid)) {
-				throw new InvalidRequestException("id can not be empty");
-			}
 			List<String> statuses = taskService.getTaskStatusForUUID(uuid);
 			if (statuses.isEmpty()) {
 				throw new ResourceNotFoundException("No resource available with id " + uuid);
 			}
 			return new ResponseEntity<>(statuses, HttpStatus.OK);
-		} catch (ResourceNotFoundException | InvalidRequestException e) {
+		} catch (ResourceNotFoundException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new InternalServerException(INTERNAL_SERVER_EXCEPTION_MSG);
@@ -82,8 +80,8 @@ public class TaskResource {
 	public ResponseEntity<List<String>> getNumList(@PathVariable("uuid") String id, @RequestParam String action)
 			throws InternalServerException, ResourceNotFoundException, InvalidRequestException {
 		try {
-			if (StringUtils.isBlank(id)) {
-				throw new InvalidRequestException("id can not be empty");
+			if (!Constants.GET_NUMLIST.equals(action)) {
+				throw new InvalidRequestException("Unsupported Operation: " + action);
 			}
 			List<String> numList = taskService.getNumListForUUID(id);
 			if (numList.isEmpty()) {
